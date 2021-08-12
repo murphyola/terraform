@@ -1,0 +1,43 @@
+
+.....
+apiVersion: app/v1
+Kind: Deployment
+metadata:
+   name: sample-deploy
+spec:
+ replicas: 1
+ template:
+ metadata:
+   labels:
+      app: sample-deploy
+   spec:
+    containers:
+    - name: sample-deploy
+      image: edurekadevops/ubuntu:sample
+      ports:
+      - containerport: 80
+
+
+
+
+......
+apVersion: v1
+kind: Service
+metadata:
+  name: sample-deploy
+  namespace: default
+  labels:
+    app: sample-deploy
+  annotations: 
+     service.beta.kubernetes.io/aws load balancer type "nlb"
+
+spec:
+  externalTrafficpolicy: local
+  ports:
+    name: http
+    port: 80
+    protocol: TCP
+    targetport: 80
+  selector:
+     app: sample-deploy
+  type: LoadBanlancer  
